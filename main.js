@@ -1,7 +1,7 @@
 //Declare 3 variables for ship
-var bow = 3;
-var hull = 4;
-var stern = 5;
+var bow = Math.floor(Math.random() * 5);
+var hull = bow + 1;
+var stern = hull + 1;
 
 var guess;
 var hits = 0;
@@ -9,7 +9,7 @@ var guesses = 0;
 
 var shipSunk = false;
 
-while (shipSunk == false) {
+while (!shipSunk) {
     guess = prompt("Enter your launch coordinate (0-6)");
     // Check if guess is valid
     if (guess < 0 || guess > 6) {
@@ -24,12 +24,11 @@ while (shipSunk == false) {
             alert("Ha! What are you aiming at?");
         }
         if (hits == 3) {
-            shipSunk = True;
+            shipSunk = true;
             alert("You've sunken my battleship!");
         }
 
     }
 }
-
-var stats = "It took you " + guesses + " shots to sink the ship.\nAccuracy: " + (3/guesses);
+var stats = "It took you " + guesses + " shots to sink the ship.\n" + "Accuracy: " + (3/guesses);
 alert(stats);
