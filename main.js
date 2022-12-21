@@ -19,15 +19,17 @@ while (shipSunk == false) {
         // Check if guess hits ship
         if (guess == bow || guess == hull || guess == stern) {
             hits = hits + 1;
-            alert("Agh! You may have struck me, but you haven't won yet!")
+            alert("Agh! You may have struck me, but you haven't won yet!");
+        } else {
+            alert("Ha! What are you aiming at?");
         }
         if (hits == 3) {
             shipSunk = True;
-            alert("You've sunken my battleship!")
+            alert("You've sunken my battleship!");
         }
 
     }
 }
 
 var stats = "It took you " + guesses + " shots to sink the ship.\nAccuracy: " + (3/guesses);
-alert(stats)
+alert(stats);
