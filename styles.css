@@ -1,4 +1,4 @@
-/* 1 */
+/* 2 */
 
 body {
     background-color: black;
@@ -8,6 +8,26 @@ body {
     position: relative;
     width: 1024px;
     height: 865px;
-    margin: 50px auto 0 auto;
-    background: url(/images/board.jpg) no-repeat;
+    margin: 30px auto 0 auto;
+    background: url(images/board.jpg) no-repeat;
+}
+
+.message-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 10px auto;
+    color: rgb(83, 175, 19);
+}
+
+.launcher {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 15px;
+}
+
+.launcher input {
+    background-color: rgb(193, 204, 186);
+    border-color: rgb(83, 175, 19);
 }
