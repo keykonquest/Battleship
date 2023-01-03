@@ -1,34 +1,61 @@
-//Declare 3 variables for ship
-var bow = Math.floor(Math.random() * 5);
-var hull = bow + 1;
-var stern = hull + 1;
+// 4 
 
-var guess;
-var hits = 0;
-var guesses = 0;
+let shipSunk = false;
 
-var shipSunk = false;
+// Provides the user visual feedback
+let display = {
+    displayMessage: function(msg) {
+        let messageArea = document.querySelector('.message-area');
+        messageArea.innerHTML = msg;
+    }, 
+    displayHit: function(location) {
+        let hitMarker = document.getElementById(location);
+        hitMarker.setAttribute("class", "hit");
+    },
+    displayMiss: function(location) {
+        let missMarker = document.getElementById(location);
+        missMarker.setAttribute("class", "miss");
+    },
+};
 
-while (!shipSunk) {
-    guess = prompt("Enter your launch coordinate (0-6)");
-    // Check if guess is valid
-    if (guess < 0 || guess > 6) {
-        alert("Please enter a number 0-6");
-    } else {
-        guesses = guesses + 1;
-        // Check if guess hits ship
-        if (guess == bow || guess == hull || guess == stern) {
-            hits = hits + 1;
-            alert("Agh! You may have struck me, but you haven't won yet!");
-        } else {
-            alert("Ha! What are you aiming at?");
+// Manages the data for game
+let gameModel = {
+    boardsize: 7,
+    //numShips: Math.floor(Math.random() * 4),
+    numShips: 2,
+    shipsSunk: 0,
+    numGuesses: 0,
+    ships: [{locations: ['10', '20', '30'], hits: ["", "", ""] },
+            {locations: ['43', '44', '45'], hits: ["", "", ""] }],
+    fire: function(guess) {
+        for (i = 0; i < this.numShips; i++) {
+            let ship = this.ships[i];
+            if (guess in ship["locations"]) {
+                display.displayHit(guess);
+            } 
         }
-        if (hits == 3) {
-            shipSunk = true;
-            alert("You've sunken my battleship!");
-        }
-
     }
+
 }
-var stats = "It took you " + guesses + " shots to sink the ship.\n" + "Accuracy: " + (3/guesses);
+
+let brain = {
+    createShip: function() {
+        let bow = Math.floor(Math.random() *  );
+    },
+    addSegment: function(head) {
+        let direction = Math.random();
+        if (direction <= 0.5) {
+            this.segment = head + 1;
+            if (this.segment > gameModel.boardsize) {
+                this.segment = head - 1;
+            }
+        } else {
+            this.segment = head + 10;
+            if
+        }
+    }
+};
+
+
+let stats = "It took you " + guesses + " shots to sink the ship.\n" + "Accuracy: " + (3/guesses);
 alert(stats);
