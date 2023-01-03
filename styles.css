@@ -1,0 +1,13 @@
+/* 1 */
+
+body {
+    background-color: black;
+}
+
+.board {
+    position: relative;
+    width: 1024px;
+    height: 865px;
+    margin: 50px auto 0 auto;
+    background: url(/images/board.jpg) no-repeat;
+}
