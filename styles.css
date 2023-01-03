@@ -1,4 +1,4 @@
-/* 2 */
+/* 3 */
 
 body {
     background-color: black;
@@ -10,6 +10,17 @@ body {
     height: 865px;
     margin: 30px auto 0 auto;
     background: url(images/board.jpg) no-repeat;
+}
+
+.grid {
+    position: relative;
+    top: 98px;
+    left: 172px;
+}
+
+.grid td {
+    width: 92px;
+    height: 92px;
 }
 
 .message-area {
