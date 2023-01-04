@@ -1,4 +1,4 @@
-// 7 
+// 8 
 
 let shipSunk = false;
 
@@ -21,13 +21,33 @@ let display = {
 // Manages the data for game
 let gameModel = {
     boardsize: 7,
-    //numShips: Math.floor(Math.random() * 4),
-    numShips: 2,
+    numShips: Math.floor(Math.random() * 3 + 2),
     shipsSunk: 0,
     numGuesses: 0,
-    ships: [{locations: ['10', '20', '30'], hits: ["", "", ""]},
-            {locations: ['43', '44', '45'], hits: ["", "", ""]},
-            {locations: ['10', '20', '30'], hits: ["", "", ""]}],
+    shipLength: Math.floor(Math.random() * 3 + 2),
+    ships: [{locations: [], hits: ["", "", ""]},
+            {locations: [], hits: ["", "", ""]},
+            {locations: [], hits: ["", "", ""]}],
+    spawnPoints: function() {
+        let locations;
+        for (let i = 0; i < this.numShips; i++) {
+            do {
+                locations = brain.createShip();
+            } while (this.collision(locations));
+            this.ships[i].locations = locations;
+        }
+    }, 
+    collision: function(locations) {
+        for (let i = 0; i < gameModel.numShips; i++) {
+            let ship = this.ships[i];
+            for (let x = 0; x < locations.length; x++) {
+                if (ship.locations.indexOf(locations[x]) >=0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
     fire: function(guess) {
         for (let i = 0; i < this.numShips; i++) {
             let ship = this.ships[i];
@@ -37,7 +57,7 @@ let gameModel = {
                 display.displayHit(guess);
                 display.displayMessage("HIT!");
                 if (this.isSunk(ship)) {
-                    display.displayMessage("You've sunken my battleship!");
+                    display.displayMessage("You've sunken my\n battleship!");
                     this.shipsSunk++;
                 }
                 return true;
@@ -49,7 +69,7 @@ let gameModel = {
         return false;
     },
     isSunk: function(ship){
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < gameModel.shipLength; i++) {
             if (ship.hits[i] !== 'x') {
                 return false;
             }
@@ -73,8 +93,8 @@ let brain = {
         } else if (row < 0 || row > gameModel.boardsize || column < 0 || column > gameModel.boardsize) {
             alert("That is not a valid input");
         } else {
-            return row + column;
             gameModel.numGuesses++;
+            return row + column;
        }
        return null;
     },
@@ -85,26 +105,37 @@ let brain = {
             gameModel.numGuesses++;
             let shot = gameModel.fire(location);
             if (shot && gameModel.shipsSunk === gameModel.numShips) {
+                let displayMessageElement = document.getElementById("display-message");
+                displayMessageElement.style.fontSize = '1.5rem';
                 display.displayMessage("You have sunken all my ships. You win this battle.");
             }
+            return shot;
         }
+        return false;
     },
 
-
     createShip: function() {
-        let direction = Math.random();
+        // ship direction: 0 = vertical, 1 = horizontal
+        let direction = Math.floor(Math.random() * 2);
         let row;
         let col;
-        if (direction <= 0.5) {
-            this.segment = head + 1;
-            if (this.segment > gameModel.boardsize) {
-                this.segment = head - 1;
-            }
+        if (direction === 1) {
+            row = Math.floor(Math.random() * gameModel.boardsize);
+            col = Math.floor(Math.random() * (gameModel.boardsize - 3) + 1);
         } else {
-            this.segment = head + 10;
+            col = Math.floor(Math.random() * gameModel.boardsize);
+            row = Math.floor(Math.random() * (gameModel.boardsize - 3) + 1);
         }
+
         let newShipLocations = [];
-         
+        for (let i = 0; i < gameModel.shipLength; i++) {
+            if (direction === 1) {
+                newShipLocations.push(row + "" + (col + i));
+            } else {
+                newShipLocations.push((row + i) + "" + col);
+            }
+        }
+        return newShipLocations;
     }
     
 };
@@ -126,6 +157,7 @@ function init() {
             fireButton.click();
         }
     });
+    gameModel.spawnPoints();
 }
 
 let click2start = document.getElementById('fireButton');
