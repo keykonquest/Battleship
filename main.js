@@ -1,4 +1,4 @@
-// 5 
+// 6 
 
 let shipSunk = false;
 
@@ -40,10 +40,11 @@ let gameModel = {
                     display.displayMessage("You've sunken my battleship!");
                     this.shipsSunk++;
                 }
-                return;
+                return true;
             } else {
                 display.displayMessage("MISS!")
                 display.displayMiss(guess);
+                return false;
             }
         }
     },
@@ -60,26 +61,33 @@ let gameModel = {
 
 let brain = {
 
+    parseGuess: function(guess) {
+        let alphabet = ["A", "B", "C", "D", "E", "F", "G"];
+        if (guess == null || guess.length !== 2) {
+            display.displayMessage("Invalid coordinate")
+        };
+        row = alphabet.indexOf(guess.charAt(0));
+        column = guess.charAt(1);
+        if (isNaN(row) || isNaN(column)) {
+            alert("That is not a valid input");
+        } else if (row < 0 || row > gameModel.boardsize || column < 0 || column > gameModel.boardsize) {
+            alert("That is not a valid input");
+        } else {
+            return row + column;
+            gameModel.numGuesses++;
+       }
+       return null;
+    },
+
     processGuess: function(guess) {
-        let location = this.processGuess(guess);
+        let location = this.parseGuess(guess)
         if (location) {
-            let alphabet = ["A", "B", "C", "D", "E", "F", "G"];
-            if (guess == null || guess.length !== 2) {
-                display.displayMessage("Invalid coordinate")
-            };
-            row = alphabet.indexOf(guess.charAt(0));
-            column = guess.charAt(1);
-            if (isNaN(row) || isNaN(column)) {
-                alert("That is not a valid input");
-            } else if (row < 0 || row > gameModel.boardsize || column < 0 || column > gameModel.boardsize) {
-                alert("That is not a valid input");
-            } else {
-                return row + column;
-                gameModel.numGuesses++
+            gameModel.numGuesses++;
+            let shot = gameModel.fire(location);
+            if (shot && gameModel.shipsSunk === gameModel.numShips) {
+                display.displayMessage("You have sunken all my ships. You win this battle.")
             }
-            return null;
         }
-        
     },
 
     createShip: function() {
