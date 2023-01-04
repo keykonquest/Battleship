@@ -1,4 +1,4 @@
-// 6 
+// 7 
 
 let shipSunk = false;
 
@@ -41,12 +41,12 @@ let gameModel = {
                     this.shipsSunk++;
                 }
                 return true;
-            } else {
-                display.displayMessage("MISS!")
-                display.displayMiss(guess);
-                return false;
             }
+            
         }
+        display.displayMessage("MISS!")
+        display.displayMiss(guess);
+        return false;
     },
     isSunk: function(ship){
         for (let i = 0; i < 3; i++) {
@@ -64,7 +64,7 @@ let brain = {
     parseGuess: function(guess) {
         let alphabet = ["A", "B", "C", "D", "E", "F", "G"];
         if (guess == null || guess.length !== 2) {
-            display.displayMessage("Invalid coordinate")
+            display.displayMessage("Invalid input")
         };
         row = alphabet.indexOf(guess.charAt(0));
         column = guess.charAt(1);
@@ -80,21 +80,21 @@ let brain = {
     },
 
     processGuess: function(guess) {
-        let location = this.parseGuess(guess)
+        let location = this.parseGuess(guess);
         if (location) {
             gameModel.numGuesses++;
             let shot = gameModel.fire(location);
             if (shot && gameModel.shipsSunk === gameModel.numShips) {
-                display.displayMessage("You have sunken all my ships. You win this battle.")
+                display.displayMessage("You have sunken all my ships. You win this battle.");
             }
         }
     },
 
+
     createShip: function() {
-        let bow = Math.floor(Math.random() * 5 );
-    },
-    addSegment: function(head) {
         let direction = Math.random();
+        let row;
+        let col;
         if (direction <= 0.5) {
             this.segment = head + 1;
             if (this.segment > gameModel.boardsize) {
@@ -102,11 +102,33 @@ let brain = {
             }
         } else {
             this.segment = head + 10;
-        };
+        }
+        let newShipLocations = [];
+         
     }
+    
 };
 
+function fireButtonHandler() {
+    let guessInput = document.getElementById('userInput');
+    let guess = guessInput.value;
+    brain.processGuess(guess);
+    //reset form
+    guessInput.value = "";
+}
 
+function init() {
+    let fireButton = document.getElementById('fireButton');
+    fireButton.onclick = fireButtonHandler;
+    let guessInput = document.getElementById('userInput');
+    guessInput.addEventListener('keydown', (event) => {
+        if (event.code === 13) {
+            fireButton.click();
+        }
+    });
+}
 
+let click2start = document.getElementById('fireButton');
+click2start.onclick = init;
 //let stats = "It took you " + guesses + " shots to sink the ship.\n" + "Accuracy: " + (3/guesses);
 //alert(stats);
