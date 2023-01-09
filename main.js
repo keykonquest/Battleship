@@ -1,4 +1,4 @@
-// 8 
+// 10
 
 let shipSunk = false;
 
@@ -24,7 +24,7 @@ let gameModel = {
     numShips: Math.floor(Math.random() * 3 + 2),
     shipsSunk: 0,
     numGuesses: 0,
-    shipLength: Math.floor(Math.random() * 3 + 2),
+    shipLength: (Math.floor(Math.random() * 3) + Math.floor(Math.random() * 2) + 1),
     ships: [{locations: [], hits: ["", "", ""]},
             {locations: [], hits: ["", "", ""]},
             {locations: [], hits: ["", "", ""]}],
@@ -105,9 +105,7 @@ let brain = {
             gameModel.numGuesses++;
             let shot = gameModel.fire(location);
             if (shot && gameModel.shipsSunk === gameModel.numShips) {
-                let displayMessageElement = document.getElementById("display-message");
-                displayMessageElement.style.fontSize = '1.5rem';
-                display.displayMessage("You have sunken all my ships. You win this battle.");
+                display.displayMessage("You've sunken all my ships.");
             }
             return shot;
         }
@@ -121,10 +119,10 @@ let brain = {
         let col;
         if (direction === 1) {
             row = Math.floor(Math.random() * gameModel.boardsize);
-            col = Math.floor(Math.random() * (gameModel.boardsize - 3) + 1);
+            col = Math.floor(Math.random() * (gameModel.boardsize - 2));
         } else {
             col = Math.floor(Math.random() * gameModel.boardsize);
-            row = Math.floor(Math.random() * (gameModel.boardsize - 3) + 1);
+            row = Math.floor(Math.random() * (gameModel.boardsize - 2));
         }
 
         let newShipLocations = [];
@@ -135,6 +133,7 @@ let brain = {
                 newShipLocations.push((row + i) + "" + col);
             }
         }
+        console.log(newShipLocations)
         return newShipLocations;
     }
     
@@ -153,14 +152,16 @@ function init() {
     fireButton.onclick = fireButtonHandler;
     let guessInput = document.getElementById('userInput');
     guessInput.addEventListener('keydown', (event) => {
-        if (event.code === 13) {
-            fireButton.click();
+        if (event.code == 'Enter') {
+            event.preventDefault();
+            fireButtonHandler();
         }
     });
     gameModel.spawnPoints();
+    display.displayMessage(`Be alert cadet`);
+    display.displayMessage(`${gameModel.numShips} enemies inbound`);
 }
 
-let click2start = document.getElementById('fireButton');
-click2start.onclick = init;
+window.onload = init;
 //let stats = "It took you " + guesses + " shots to sink the ship.\n" + "Accuracy: " + (3/guesses);
-//alert(stats);
+//alert(stats)
